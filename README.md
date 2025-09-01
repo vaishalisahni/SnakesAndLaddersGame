@@ -53,4 +53,5 @@ npm run preview
 
 📸 Screenshots
 
-<img width="991" height="878" alt="image" src="https://github.com/user-attachments/assets/f28a81b1-de99-4d1a-9310-7aa89d6db56a" />
+<img width="991" height="878" alt="Screenshot 2025-09-02 014314" src="https://github.com/user-attachments/assets/aa8bb636-b13e-4f93-a5db-7883b5875b76" />
+
