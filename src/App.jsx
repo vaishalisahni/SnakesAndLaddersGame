@@ -5,9 +5,7 @@ import GameBoard from "./Components/GameBoard.jsx";
 import { useGameStore } from "./store/gameStore.js";
 
 function App() {
-  const { gameState } = useGameStore();
-
-  const { loadGame } = useGameStore();
+  const { gameState, loadGame } = useGameStore();
 
   useEffect(() => {
     loadGame();

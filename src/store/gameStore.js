@@ -13,16 +13,26 @@ export const useGameStore = create((set, get) => ({
     isRolling: false,
 
     // Actions
-    setGameState: (state) => set({ gameState: state }),
-    setGameMode: (mode) => set({ gameMode: mode }),
+    setGameState: (state) => {
+        set({ gameState: state });
+        setTimeout(() => get().saveGame(), 100);
+    },
 
-    startGame: () => set({
-        positions: [1, 1],
-        currentPlayer: 0,
-        winner: null,
-        gameMessage: '🎯 Game Started! Player 1\'s turn.',
-        isRolling: false,
-    }),
+    setGameMode: (mode) => {
+        set({ gameMode: mode });
+        setTimeout(() => get().saveGame(), 100);
+    },
+
+    startGame: () => {
+        set({
+            positions: [1, 1],
+            currentPlayer: 0,
+            winner: null,
+            gameMessage: '🎯 Game Started! Player 1\'s turn.',
+            isRolling: false,
+        });
+        setTimeout(() => get().saveGame(), 100);
+    },
 
     rollDice: () => {
         const { positions, currentPlayer, gameMode, winner, isRolling } = get();
@@ -74,6 +84,8 @@ export const useGameStore = create((set, get) => ({
                     gameMessage: message,
                     isRolling: false
                 });
+                // Auto-save after win
+                setTimeout(() => get().saveGame(), 100);
                 return;
             }
 
@@ -83,6 +95,7 @@ export const useGameStore = create((set, get) => ({
                 isRolling: false
             });
 
+            setTimeout(() => get().saveGame(), 100);
             get().switchTurn();
         }, 500);
     },
@@ -97,6 +110,8 @@ export const useGameStore = create((set, get) => ({
             set(state => ({
                 gameMessage: state.gameMessage + `\n👉 ${playerName}'s turn`
             }));
+            
+            setTimeout(() => get().saveGame(), 100);
         }, 600);
     },
 
@@ -107,24 +122,52 @@ export const useGameStore = create((set, get) => ({
 
     saveGame: () => {
         const state = get();
-        const saveData = {
-            gameState: state.gameState,
-            gameMode: state.gameMode,
-            positions: state.positions,
-            currentPlayer: state.currentPlayer,
-            winner: state.winner,
-            gameMessage: state.gameMessage,
-            isRolling: state.isRolling,
-        };
-        localStorage.setItem("Game", JSON.stringify(saveData));
-        console.log("Game saved:", saveData);
+        
+        if (state.gameState !== 'start') {
+            const saveData = {
+                gameState: state.gameState,
+                gameMode: state.gameMode,
+                positions: state.positions,
+                currentPlayer: state.currentPlayer,
+                winner: state.winner,
+                gameMessage: state.gameMessage,
+                isRolling: false, 
+            };
+            localStorage.setItem("Game", JSON.stringify(saveData));
+        }
     },
 
     loadGame: () => {
         const saved = localStorage.getItem("Game");
         if (saved) {
-            const parsed = JSON.parse(saved);
-            set(parsed);
+            try {
+                const parsed = JSON.parse(saved);
+
+                if (parsed.gameState && parsed.gameState !== 'start') {
+                    set({
+                        ...parsed,
+                        isRolling: false 
+                    });
+                    return true; 
+                }
+            } catch (error) {
+                console.error("Error loading game:", error);
+                localStorage.removeItem("Game"); 
+            }
         }
+        return false; 
+    },
+
+    clearSave: () => {
+        localStorage.removeItem("Game");
+        set({
+            gameState: 'start',
+            gameMode: null,
+            positions: [1, 1],
+            currentPlayer: 0,
+            winner: null,
+            gameMessage: '',
+            isRolling: false,
+        });
     },
 }));
