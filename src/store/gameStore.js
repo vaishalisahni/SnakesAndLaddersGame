@@ -49,10 +49,10 @@ export const useGameStore = create((set, get) => ({
         setTimeout(() => {
             const pos = positions[currentPlayer];
             let newPos = pos + dice;
-            let message = `🎲 ${playerName} rolled: ${dice}`;
+            let message = `🎲 ${playerName} rolled: ${dice}!`;
 
             if (newPos > 100) {
-                message += `\n${playerName} needs ${100 - pos} to win.`;
+                message += `${playerName} needs ${100 - pos} to win.`;
                 set({
                     gameMessage: message,
                     isRolling: false
@@ -63,12 +63,12 @@ export const useGameStore = create((set, get) => ({
 
             if (ladders[newPos]) {
                 newPos = ladders[newPos];
-                message += `\n🎉 ${playerName} climbed a ladder to ${newPos}!`;
+                message += ` 🎉 ${playerName} climbed a ladder to ${newPos}!`;
             }
 
             if (snakes[newPos]) {
                 newPos = snakes[newPos];
-                message += `\n🐍 ${playerName} got bitten and fell to ${newPos}!`;
+                message += ` 🐍 ${playerName} got bitten and fell to ${newPos}!`;
             }
 
             // Update positions
@@ -96,7 +96,9 @@ export const useGameStore = create((set, get) => ({
             });
 
             setTimeout(() => get().saveGame(), 100);
-            get().switchTurn();
+            if(winner === null) {
+                get().switchTurn();
+            }
         }, 500);
     },
 
@@ -108,7 +110,7 @@ export const useGameStore = create((set, get) => ({
         setTimeout(() => {
             const playerName = gameMode === 'pvc' && nextPlayer === 1 ? 'Computer' : `Player ${nextPlayer + 1}`;
             set(state => ({
-                gameMessage: state.gameMessage + `\n👉 ${playerName}'s turn`
+                gameMessage: state.gameMessage + `👉 ${playerName}'s turn`
             }));
             
             setTimeout(() => get().saveGame(), 100);

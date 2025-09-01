@@ -91,7 +91,7 @@ const GameBoard = () => {
             <button
               onClick={rollDice}
               disabled={
-                isRolling || (gameMode === "pvc" && currentPlayer === 1)
+                isRolling || (gameMode === "pvc" && currentPlayer === 1) || winner !== null
               }
               className="bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-full text-lg transform hover:scale-105 transition-all duration-200 shadow-lg mr-4"
             >
@@ -120,9 +120,9 @@ const GameBoard = () => {
 
         {/* Game Status */}
         <div className="bg-white rounded-lg p-4 mb-6 shadow-lg max-w-2xl mx-auto">
-          <pre className="text-center text-gray-800 font-semibold whitespace-pre-line">
+          <p className="text-center text-gray-800 font-semibold whitespace-pre-line">
             {gameMessage}
-          </pre>
+          </p>
         </div>
 
         {/* Game Board */}
