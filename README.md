@@ -24,30 +24,42 @@ A classic **Snakes and Ladders** game built with **React + Vite**, styled using 
 
 ---
 
-## 📦 Installation  
+## 📦 Installation & Running the Project  
 
-Clone the repository and install dependencies:  
+Clone the repository, install dependencies, and run the project:  
 
 ```bash
+# Clone the repository
 git clone https://github.com/your-username/snakes-and-ladders.git
+
+# Move into project directory
 cd snakes-and-ladders
+
+# Install dependencies
 npm install
-▶️ Run the Project
-To start the development server:
 
-bash
-Copy code
+# Start development server
 npm run dev
-Then open http://localhost:5173 in your browser.
+````
 
-🏗️ Build for Production
-bash
-Copy code
+Now open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## 🏗️ Build & Preview
+
+```bash
+# Build for production
 npm run build
-Preview production build:
 
-bash
-Copy code
+# Preview production build
 npm run preview
-🌐 Deployed Link
-👉 Play Here
+```
+
+---
+
+## 🌐 Deployed Link
+
+👉 [Play Here](https://snakes-and-ladders-game-plum.vercel.app/)
+
+```
