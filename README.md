@@ -32,26 +32,22 @@ Clone the repository and install dependencies:
 git clone https://github.com/your-username/snakes-and-ladders.git
 cd snakes-and-ladders
 npm install
-
 ▶️ Run the Project
-
 To start the development server:
 
+bash
+Copy code
 npm run dev
-
-
-Then open http://localhost:5173
- in your browser.
+Then open http://localhost:5173 in your browser.
 
 🏗️ Build for Production
+bash
+Copy code
 npm run build
-
-
 Preview production build:
 
+bash
+Copy code
 npm run preview
-
-📸 Screenshots
-
-<img width="991" height="878" alt="Screenshot 2025-09-02 014314" src="https://github.com/user-attachments/assets/aa8bb636-b13e-4f93-a5db-7883b5875b76" />
-
+🌐 Deployed Link
+👉 Play Here
