@@ -73,7 +73,7 @@ const GameBoard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-400 to-blue-500 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-6">
