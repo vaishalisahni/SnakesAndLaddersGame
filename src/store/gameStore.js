@@ -102,13 +102,29 @@ export const useGameStore = create((set, get) => ({
 
     resetGame: () => {
         get().startGame();
+        localStorage.removeItem("Game");
     },
 
     saveGame: () => {
-        console.log('Game saved to localStorage');
+        const state = get();
+        const saveData = {
+            gameState: state.gameState,
+            gameMode: state.gameMode,
+            positions: state.positions,
+            currentPlayer: state.currentPlayer,
+            winner: state.winner,
+            gameMessage: state.gameMessage,
+            isRolling: state.isRolling,
+        };
+        localStorage.setItem("Game", JSON.stringify(saveData));
+        console.log("Game saved:", saveData);
     },
 
     loadGame: () => {
-        console.log('Game loaded from localStorage');
+        const saved = localStorage.getItem("Game");
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            set(parsed);
+        }
     },
 }));
