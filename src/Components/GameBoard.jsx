@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { RotateCcw, ArrowLeft, Play } from "lucide-react";
 import bgimage from "../assets/bg-image.jpg";
 import { useGameStore } from "../store/gameStore.js";
+import AppBG from "../assets/app-bg.jpg";
 
 const GameBoard = () => {
   const {
@@ -29,7 +30,7 @@ const GameBoard = () => {
   const getCoordinates = (position) => {
     const boardSize = 650; // Total board size
     const borderSize = 25; // Border size from your image
-    const playableArea = boardSize - (borderSize * 2); // 600px playable area
+    const playableArea = boardSize - borderSize * 2; // 600px playable area
     const cellSize = playableArea / 10; // 60px per cell
 
     const row = Math.floor((position - 1) / 10);
@@ -37,16 +38,16 @@ const GameBoard = () => {
 
     let x;
     if (row % 2 === 0) {
-      // left to right 
+      // left to right
       x = col * cellSize + borderSize;
     } else {
-      // right to left 
+      // right to left
       x = (9 - col) * cellSize + borderSize;
     }
-    
+
     //calculating y from top
     const y = (9 - row) * cellSize + borderSize;
-    
+
     return { x, y };
   };
 
@@ -72,104 +73,141 @@ const GameBoard = () => {
     };
   };
 
+  // Function to get the display text for current status
+  const getGameStatusText = () => {
+    if (winner !== null) {
+      // When there's a winner, show winner message
+      return `🏆 ${
+        gameMode === "pvc" && winner === 1
+          ? "Computer"
+          : `Player ${winner + 1}`
+      } Wins!`;
+    }
+    
+    // When no winner, show whose turn it is
+    if (gameMode === "pvc") {
+      return currentPlayer === 0 ? "It's Your Turn!" : "Computer's Turn!";
+    } else {
+      return `Player ${currentPlayer + 1}'s Turn!`;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 p-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            🐍🪜 Snakes & Ladders
+    <div
+      className="min-h-screen bg-cover bg-center bg-no-repeat relative"
+      style={{
+        backgroundImage: `url(${AppBG})`,
+      }}
+    >
+      {/* Header */}
+      <div className="absolute top-0 left-0 right-0 z-20 p-6">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-yellow-400 rounded-xl flex items-center justify-center shadow-lg">
+            <span className="text-2xl">🎲</span>
+          </div>
+          <h1 className="text-3xl font-bold text-white drop-shadow-lg">
+            Snakes & Ladders
           </h1>
-          <p className="text-xl text-white">
-            {gameMode === "pvc" ? "Player vs Computer" : "Player vs Player"}
-          </p>
         </div>
+      </div>
 
-        {/* Game Controls */}
-        <div className="text-center mb-6">
-          {!winner && (
-            <button
-              onClick={rollDice}
-              disabled={
-                isRolling || (gameMode === "pvc" && currentPlayer === 1) || winner !== null
-              }
-              className="bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-full text-lg transform hover:scale-105 transition-all duration-200 shadow-lg mr-4"
-            >
-              🎲 {isRolling ? "Rolling..." : "Roll Dice"}
-            </button>
-          )}
-
-          {winner !== null && (
-            <button
-              onClick={resetGame}
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full text-lg transform hover:scale-105 transition-all duration-200 shadow-lg mr-4"
-            >
-              <RotateCcw size={20} className="inline mr-2" />
-              Play Again
-            </button>
-          )}
-
-          <button
-            onClick={() => setGameState("mode")}
-            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full text-lg transform hover:scale-105 transition-all duration-200 shadow-lg"
-          >
-            <ArrowLeft size={20} className="inline mr-2" />
-            Back
-          </button>
-        </div>
-
-        {/* Game Status */}
-        <div className="bg-white rounded-lg p-4 mb-6 shadow-lg max-w-2xl mx-auto">
-          <p className="text-center text-gray-800 font-semibold whitespace-pre-line">
-            {gameMessage}
-          </p>
-        </div>
-
-        {/* Game Board */}
-        <div className="flex justify-center">
-          <div
-            className="relative border-4 border-gray-800 rounded-lg shadow-2xl"
-            style={{
-              width: "650px", 
-              height: "650px", 
-              backgroundImage: `url(${bgimage})`,
-              backgroundSize: "cover", 
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-          >
-            {/* Players */}
+      <div className="min-h-screen p-8 pt-24">
+        <div className="max-w-7xl mx-auto flex gap-8 items-center justify-center">
+          {/* Game Board - Left Side */}
+          <div className="flex-shrink-0">
             <div
-              className="w-6 h-6 rounded-full bg-red-500 border-2 border-white shadow-lg absolute z-10"
-              style={getPlayerStyle(0)}
-              title="Player 1"
-            />
-            <div
-              className="w-6 h-6 rounded-full bg-yellow-400 border-2 border-white shadow-lg absolute z-10"
-              style={getPlayerStyle(1)}
-              title={gameMode === "pvc" ? "Computer" : "Player 2"}
-            />
-          </div>
-        </div>
-
-        {/* Player Info */}
-        <div className="mt-6 flex justify-center gap-8">
-          <div className="bg-white rounded-lg p-4 shadow-lg">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-red-500"></div>
-              <span className="font-bold">Player 1</span>
+              className="relative border-4 border-amber-700 rounded-lg shadow-2xl"
+              style={{
+                width: "650px",
+                height: "650px",
+                backgroundImage: `url(${bgimage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              {/* Players */}
+              <div
+                className="w-6 h-6 rounded-full bg-blue-500 border-2 border-white shadow-lg absolute z-10"
+                style={getPlayerStyle(0)}
+                title="Player 1"
+              />
+              <div
+                className="w-6 h-6 rounded-full bg-red-500 border-2 border-white shadow-lg absolute z-10"
+                style={getPlayerStyle(1)}
+                title={gameMode === "pvc" ? "Computer" : "Player 2"}
+              />
             </div>
-            <p className="text-gray-600">Position: {positions[0]}</p>
           </div>
 
-          <div className="bg-white rounded-lg p-4 shadow-lg">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-yellow-400"></div>
-              <span className="font-bold">
-                {gameMode === "pvc" ? "Computer" : "Player 2"}
-              </span>
+          {/* Single Control Box - Right Side */}
+          <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border-4 border-gray-200 w-full max-w-md max-h-lg">
+            {/* Game On Title */}
+            <div className="text-center mb-6">
+              <h2 className="text-3xl font-bold text-gray-600 mb-1">
+                Game On!
+              </h2>
+              <p className="text-xl text-yellow-500 font-bold">
+                {getGameStatusText()}
+              </p>
             </div>
-            <p className="text-gray-600">Position: {positions[1]}</p>
+
+            {/* Player Position Cards */}
+            <div className="flex gap-4 mb-6">
+              <div className="bg-blue-400 rounded-2xl p-4 flex-1 text-center text-white">
+                <p className="font-semibold text-sm mb-1">
+                  {gameMode === "pvc" ? "Your Position" : "Player 1"}
+                </p>
+                <p className="text-3xl font-bold">{positions[0]}</p>
+              </div>
+              <div className="bg-orange-400 rounded-2xl p-4 flex-1 text-center text-white">
+                <p className="font-semibold text-sm mb-1">
+                  {gameMode === "pvc" ? "Computer" : "Player 2"}
+                </p>
+                <p className="text-3xl font-bold">{positions[1]}</p>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-3">
+              {!winner && (
+                <button
+                  onClick={rollDice}
+                  disabled={
+                    isRolling ||
+                    (gameMode === "pvc" && currentPlayer === 1) ||
+                    winner !== null
+                  }
+                  className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-4 px-6 rounded-full text-lg flex items-center justify-center gap-2 shadow-lg"
+                >
+                  🎲 {isRolling ? "Rolling..." : "Roll Dice"}
+                </button>
+              )}
+
+              {winner !== null && (
+                <button
+                  onClick={resetGame}
+                  className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-6 rounded-full text-lg flex items-center justify-center gap-2 shadow-lg"
+                >
+                  🔄 Restart Game
+                </button>
+              )}
+            </div>
+
+            {/* Game Status Message */}
+            <div className="mt-6 p-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-inner border border-gray-200">
+              <p className="text-center text-gray-800 text-base font-semibold whitespace-pre-line">
+                {gameMessage}
+              </p>
+            </div>
+
+            {/* Back Button */}
+            <button
+              onClick={() => setGameState("mode")}
+              className="w-full mt-4 bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-6 rounded-full text-sm flex items-center justify-center gap-2"
+            >
+              ← Back to Mode Selection
+            </button>
           </div>
         </div>
       </div>

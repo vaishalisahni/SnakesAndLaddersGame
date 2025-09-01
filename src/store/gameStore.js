@@ -28,7 +28,7 @@ export const useGameStore = create((set, get) => ({
             positions: [1, 1],
             currentPlayer: 0,
             winner: null,
-            gameMessage: '🎯 Game Started! Player 1\'s turn.',
+            gameMessage: '',
             isRolling: false,
         });
         setTimeout(() => get().saveGame(), 100);
@@ -109,9 +109,6 @@ export const useGameStore = create((set, get) => ({
 
         setTimeout(() => {
             const playerName = gameMode === 'pvc' && nextPlayer === 1 ? 'Computer' : `Player ${nextPlayer + 1}`;
-            set(state => ({
-                gameMessage: state.gameMessage + `👉 ${playerName}'s turn`
-            }));
             
             setTimeout(() => get().saveGame(), 100);
         }, 600);
