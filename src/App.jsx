@@ -1,24 +1,19 @@
-import { useState } from 'react'
-import { snakes , ladders} from './constants.js';
-import StartScreen from './Components/StartScreen.jsx';
-import ModeSelection from './Components/ModeSelection.jsx';
+import { useState } from "react";
+import StartScreen from "./Components/StartScreen.jsx";
+import ModeSelection from "./Components/ModeSelection.jsx";
+import GameBoard from "./Components/GameBoard.jsx";
+import { useGameStore } from './store/gameStore.js';
 
 function App() {
-  const [gameState, setGameState] = useState("start");
-  const [gameMode, setGameMode] =useState(null);
-  const [pos,setPos]=useState([0,0]);
-  const [currPlayer,setCurrPlayer]=useState(0);
-  const [currDiceValue, setCurrDiceValue]=useState(null);
-  const [winner,setWinner]=useState(null);
-  const [gameMessage,setGameMessage]=useState('');
-  const [isRolling, setIsRolling] =useState('false');
+  const { gameState } = useGameStore();
 
   return (
     <>
-      {/* <StartScreen /> */}
-      <ModeSelection />
+      {gameState === 'start' && <StartScreen />}
+      {gameState === 'mode' && <ModeSelection />}
+      {gameState === 'playing' && <GameBoard />}
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
